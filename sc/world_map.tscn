@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://da7qihd56g1f8"]
+
+[node name="WorldMap" type="Node2D"]
+
+[node name="VisualMap" type="Sprite2D" parent="."]
+
+[node name="Provinces" type="Node2D" parent="."]
