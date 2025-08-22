@@ -113,7 +113,6 @@ func _unhandled_input(event):
 			
 			# Highlight the new province
 			clicked_province.color = Color(1, 1, 0, 0.5) # Semi-transparent yellow
-			print(clicked_province)
 			selected_province = clicked_province
 			#selected_province_id = id
 		else:

@@ -1,10 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://da7qihd56g1f8"]
+[gd_scene load_steps=3 format=3 uid="uid://da7qihd56g1f8"]
 
 [ext_resource type="Script" uid="uid://lfs0wtknaxn" path="res://world_map.gd" id="1_r63r8"]
+[ext_resource type="Texture2D" uid="uid://x6vlv8cvpp2m" path="res://resources/maps/Sea of Aerthos and Outlining Regions 2025-08-21-19-16.png" id="2_deu6t"]
 
 [node name="WorldMap" type="Node2D"]
 script = ExtResource("1_r63r8")
 
+[node name="Camera2D" type="Camera2D" parent="."]
+
 [node name="VisualMap" type="Sprite2D" parent="."]
+texture = ExtResource("2_deu6t")
 
 [node name="Provinces" type="Node2D" parent="."]
