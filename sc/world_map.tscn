@@ -12,5 +12,6 @@ script = ExtResource("2_4ojr4")
 
 [node name="VisualMap" type="Sprite2D" parent="."]
 texture = ExtResource("2_deu6t")
+centered = false
 
 [node name="Provinces" type="Node2D" parent="."]
