@@ -4,6 +4,10 @@ extends Node2D
 @onready var provinces_container = $Provinces
 const GEOJSON_PATH = "res://resources/maps/Sea of Aerthos and Outlining Regions Cells 2025-08-21-19-15.geojson"
 
+# dimensions of map PNG
+const MAP_WIDTH = 1920.0
+const MAP_HEIGHT = 957.0
+
 # var to store province data
 var province_data = {}
 var selected_province = null
@@ -63,8 +67,15 @@ func draw_provinces():
 		
 		# convert JSON array points to vectors
 		var polygon_points = PackedVector2Array()
-		for point in data.geometry: # may need to change
-			polygon_points.append(Vector2(point[0], point[1]))
+		#for point in data.geometry: # may need to change
+			#polygon_points.append(Vector2(point[0], point[1]))
+		
+		# project geographic points to a pixel coordinate
+		for geo_point in data.geometry:
+			var long = geo_point[0]
+			var lat = geo_point[1]
+			var pixel_coordinate = chart_projection(long, lat)
+			polygon_points.append(pixel_coordinate)
 		
 		# enter province points into new polygon
 		province_polygon.polygon = polygon_points
@@ -80,7 +91,8 @@ func draw_provinces():
 		#provinces_container.add_child(province_area)
 		
 		# A semi-transparent white lets the main map show through.
-		province_polygon.color = Color(1, 1, 1, 0.2)
+		#province_polygon.color = Color(1, 1, 1, 0.2)
+		province_polygon.color = Color(randf(), randf(), randf(), 0.8)
 		
 		# Store metadata directly on the node. This is very useful!
 		province_polygon.set_meta("province_id", id)
@@ -134,6 +146,14 @@ func get_province_at_position(screen_position: Vector2) -> Polygon2D:
 			
 	return null # Return null if no province was found at that position
 
+# converts lat and long to pixel coordinates
+func chart_projection(long, lat):
+	var x = (long + 180.0) * (MAP_WIDTH / 360)
+	
+	# 90 - lat to flip Y-axis, Y pixels increase downwards 
+	var y = (90.0 - lat) * (MAP_HEIGHT / 180)
+	
+	return Vector2(x,y)
 
 """
 func _on_province_input_event(_viewport, event, _shape_idx):
