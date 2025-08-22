@@ -21,7 +21,7 @@ var selected_province = null
 func _ready():
 	# for debugging
 	find_map_bounds()
-	provinces_container.visible = true
+	#provinces_container.visible = true
 	
 	load_provinces()
 	draw_provinces()
@@ -76,8 +76,8 @@ func draw_provinces():
 		province_polygon.polygon = polygon_points
 		
 		# A semi-transparent white lets the main map show through.
-		#province_polygon.color = Color(1, 1, 1, 0.2)
-		province_polygon.color = Color(randf(), randf(), randf(), 0.8)
+		province_polygon.color = Color(1, 1, 1, 0.2)
+		#province_polygon.color = Color(randf(), randf(), randf(), 0.8)
 		
 		# Store metadata directly on the node. This is very useful!
 		province_polygon.set_meta("province_id", id)
