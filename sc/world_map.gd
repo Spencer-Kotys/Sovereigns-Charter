@@ -2,7 +2,7 @@ extends Node2D
 
 # initialize provinces on startup
 @onready var provinces_container = $Provinces
-const GEOJSON_PATH = "res://resources/maps/Sea_of_Aerthos_and_Outlining_Regions_Cells_2025-08-21-19-15.geojson"
+const GEOJSON_PATH = "res://resources/maps/Sea of Aerthos and Outlining Regions Cells 2025-08-21-19-15.geojson"
 
 # var to store province data
 var province_data = {}
@@ -24,11 +24,11 @@ func load_provinces():
 	if json_data and json_data.has("features"):
 		for feature in json_data.features:
 			# get unique ID
-			var province_id = feature.properties.i
+			var province_id = feature.properties.id
 			
 			# store data
 			province_data[province_id] = {
-				"name": feature.properties.name,
+				#"name": feature.properties.name,
 				"state": feature.properties.state,
 				"culture": feature.properties.culture,
 				"population": feature.properties.population,
