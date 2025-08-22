@@ -52,23 +52,11 @@ func draw_provinces():
 	for id in province_data:
 		var data = province_data[id]
 		
-		# area to detect input and collision, add unique names for scenetree
-		#var province_area = Area2D.new()
-		#province_area.name = "ProvinceArea_" + str(id)
-		
 		# province polygon 
 		var province_polygon = Polygon2D.new()
 		
-		# metadata to connect province to area
-		# province_area.set_meta("province_id", id)
-		
-		# new collision shape
-		#var collision_polygon = CollisionPolygon2D.new()
-		
 		# convert JSON array points to vectors
 		var polygon_points = PackedVector2Array()
-		#for point in data.geometry: # may need to change
-			#polygon_points.append(Vector2(point[0], point[1]))
 		
 		# project geographic points to a pixel coordinate
 		for geo_point in data.geometry:
@@ -79,16 +67,6 @@ func draw_provinces():
 		
 		# enter province points into new polygon
 		province_polygon.polygon = polygon_points
-		#collision_polygon.polygon = polygon_points
-		
-		# connect event signals
-		#province_area.input_event.connect(_on_province_input_event)
-		
-		# add collision to province area
-		#province_area.add_child(collision_polygon)
-		
-		# add new province to container
-		#provinces_container.add_child(province_area)
 		
 		# A semi-transparent white lets the main map show through.
 		#province_polygon.color = Color(1, 1, 1, 0.2)
@@ -96,8 +74,6 @@ func draw_provinces():
 		
 		# Store metadata directly on the node. This is very useful!
 		province_polygon.set_meta("province_id", id)
-		# You can store more data here (population, culture, etc.)
-		# province_nodes[province_id] = province_polygon
 		
 		# add polygon
 		provinces_container.add_child(province_polygon)
@@ -110,26 +86,17 @@ func _unhandled_input(event):
 		# get which province is clicked
 		var clicked_province = get_province_at_position(world_mouse_pos)
 		
-		# --- Highlighting Logic ---
-		# First, reset the previously selected province (if any)
+		# reset the previously selected province
 		if selected_province != null:
 			selected_province.color = Color(1, 1, 1, 0.2) # Back to default
-		#if selected_province != -1 and province_data.has(selected_province):
-			#if clicked_province != selected_province:
-				#selected_province.color = Color(1, 1, 1, 0.2) # Back to default
-			#province_data[selected_province_id].color = Color(1, 1, 1, 0.2) # Back to default
-			#print(province_data[selected_province_id])
 		
 		if clicked_province:
 			var id = clicked_province.get_meta("province_id")
-			# var name = clicked_province.get_meta("province_name")
 			print("You clicked on Province ID %s" % [id])
-			# print("You clicked on Province ID %s: %s" % [id, name])
 			
 			# Highlight the new province
 			clicked_province.color = Color(1, 1, 0, 0.5) # Semi-transparent yellow
 			selected_province = clicked_province
-			#selected_province_id = id
 		else:
 			print("Clicked on the sea or an unassigned area.")
 			selected_province = null
@@ -154,37 +121,3 @@ func chart_projection(long, lat):
 	var y = (90.0 - lat) * (MAP_HEIGHT / 180)
 	
 	return Vector2(x,y)
-
-"""
-func _on_province_input_event(_viewport, event, _shape_idx):
-	# find the parent Area2D
-	var area_node = find_parent_area(event.get_position())
-	if not area_node: 
-		return
-	
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
-		var province_id = area_node.get_meta("province_id")
-		var data = province_data[province_id]
-		print("Clicked on Province ID %s: %s" % [province_id, data.name])
-
-		# --- HIGHLIGHTING LOGIC ---
-		# Clear previous highlights
-		for child in provinces_container.get_children():
-			if child.has_node("Visual"):
-				child.get_node("Visual").color = Color(1, 1, 1, 0) # Transparent
-		
-		# Highlight the currently clicked one
-		var visual_node = area_node.get_node("Visual")
-		visual_node.color = Color(1, 1, 0, 0.4) # Semi-transparent yellow
-
-# Helper function to get the correct Area2D
-func find_parent_area(global_pos):
-	var space_state = get_world_2d().direct_space_state
-	var query = PhysicsPointQueryParameters2D.new()
-	query.position = global_pos
-	var results = space_state.intersect_point(query)
-	for result in results:
-		if result.collider is Area2D and result.collider.has_meta("province_id"):
-			return result.collider
-	return null
-"""
