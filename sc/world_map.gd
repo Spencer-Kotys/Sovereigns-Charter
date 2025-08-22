@@ -28,10 +28,14 @@ func load_provinces():
 			
 			# store data
 			province_data[province_id] = {
-				#"name": feature.properties.name,
-				"state": feature.properties.state,
-				"culture": feature.properties.culture,
+				"biome": feature.properties.biome,
+				"type": feature.properties.type,
 				"population": feature.properties.population,
+				"state": feature.properties.state,
+				"province": feature.properties.province,
+				"culture": feature.properties.culture,
+				"religion": feature.properties.religion,
+				"neighbors": feature.properties.neighbors,
 				"geometry": feature.geometry.coordinates[0]
 			}
 
