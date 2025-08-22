@@ -93,7 +93,10 @@ func draw_provinces():
 # Use _unhandled_input to not intercept GUI events
 func _unhandled_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
-		var clicked_province = get_province_at_position(event.position)
+		# get global mouse position in world coordinates
+		var world_mouse_pos = get_global_mouse_position()
+		# get which province is clicked
+		var clicked_province = get_province_at_position(world_mouse_pos)
 		
 		# --- Highlighting Logic ---
 		# First, reset the previously selected province (if any)
