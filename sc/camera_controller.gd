@@ -7,6 +7,11 @@ func _ready():
 	# wait for first frame to process
 	await get_tree().process_frame
 	set_camera_limits()
+	
+	# --- SAFETY CHECK ---
+	# Ensure the camera's starting position is within the calculated limits.
+	position.x = clamp(position.x, limit_left, limit_right)
+	position.y = clamp(position.y, limit_top, limit_bottom)
 
 func set_camera_limits():
 	# get VisualMap node
