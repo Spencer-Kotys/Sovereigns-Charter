@@ -2,6 +2,7 @@ extends Camera2D
 
 var is_dragging =false
 var drag_start_position = Vector2.ZERO
+var zoom_factor = 1.1
 
 func _ready():
 	# wait for first frame to process
@@ -36,25 +37,33 @@ func set_camera_limits():
 	var viewport_zoomed = viewport_rect.size / zoom
 	
 	# horizontal limits
+	# if viewport is less than 1/3 the map width, zoom out
+	if viewport_zoomed.x * 3 < map_size.x:
+		zoom /= zoom_factor
 	# if wider then view, set limits to width of map
 	if map_size.x > viewport_zoomed.x:
 		limit_left = map_top_left.x
 		limit_right = map_size.x
-	# if map is narrower, center the camera horizontally and lock it to center
+	# if map is narrower, center the camera horizontally, lock it to center, and zoom
 	else:
-		var map_center_x = map_top_left.x + map_size.x / 2.0
+		zoom *= zoom_factor
+		var map_center_x = map_size.x
 		limit_left = map_center_x
 		limit_right = map_center_x
 		self.position.x = map_center_x
 	
 	# vertical Limits
+	# if viewport is less than 1/3 the map height, zoom out
+	if viewport_zoomed.y * 3 < map_size.y:
+		zoom /= zoom_factor
 	# if map is taller than the view, set vertical limits to height of map
 	if map_size.y > viewport_zoomed.y:
 		limit_top = map_top_left.y
 		limit_bottom = map_size.y
-	# if map is shorter, center the camera vertically and lock it to center
+	# if map is shorter, center the camera vertically, lock it to center, and zoom
 	else:
-		var map_center_y = map_top_left.y + map_size.y / 2.0
+		zoom *= zoom_factor
+		var map_center_y = map_top_left.y
 		limit_top = map_center_y
 		limit_bottom = map_center_y
 		self.position.y = map_center_y
@@ -71,11 +80,13 @@ func _input(event):
 		self.position -= event.relative
 		
 	# handle zooming
-	var zoom_factor = 1.1
 	if event is InputEventMouseButton:
-		# if mouse wheel up zoom in
+		# if mouse wheel up zoom out
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			zoom /= zoom_factor
-		# if mouse wheel down zoom out
+			pass
+		# if mouse wheel down zoom in
 		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			zoom *= zoom_factor
+		
+		set_camera_limits()
