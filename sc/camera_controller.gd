@@ -15,7 +15,7 @@ func _ready():
 	MAP_HEIGHT = world_map.MAP_HEIGHT
 
 func _unhandled_input(event):
-	# Start dragging when the middle mouse button is pressed
+	# Start dragging when the left mouse button is pressed
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.is_pressed():
 			is_dragging = true
@@ -26,3 +26,9 @@ func _unhandled_input(event):
 	# While dragging, move the camera
 	if event is InputEventMouseMotion and is_dragging:
 		self.position = get_global_mouse_position() - drag_start_position
+		var min_x = MAP_WIDTH / 2.0
+		var max_x = MAP_WIDTH
+		var min_y = MAP_HEIGHT / 2.0
+		var max_y = MAP_HEIGHT
+		self.position.x = clamp(self.position.x, min_x, max_x)
+		self.position.y = clamp(self.position.y, min_y, max_y)
