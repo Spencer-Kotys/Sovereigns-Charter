@@ -32,7 +32,7 @@ func set_camera_limits():
 	# calculate top-left corner
 	var map_top_left = map.global_position
 	
-	# adjuct viewport for camera zoom level
+	# adjust viewport for camera zoom level
 	var viewport_zoomed = viewport_rect.size / zoom
 	
 	# horizontal limits
@@ -42,7 +42,6 @@ func set_camera_limits():
 		limit_right = map_size.x
 	# if map is narrower, center the camera horizontally and lock it to center
 	else:
-		print("Map is smaller than screen, centering horizontally.")
 		var map_center_x = map_top_left.x + map_size.x / 2.0
 		limit_left = map_center_x
 		limit_right = map_center_x
@@ -55,19 +54,28 @@ func set_camera_limits():
 		limit_bottom = map_size.y
 	# if map is shorter, center the camera vertically and lock it to center
 	else:
-		print("Map is smaller than screen, centering vertically.")
 		var map_center_y = map_top_left.y + map_size.y / 2.0
 		limit_top = map_center_y
 		limit_bottom = map_center_y
 		self.position.y = map_center_y
 
 func _input(event):
-	# Handle starting and stopping the drag
+	# handle starting and stopping the drag
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		is_dragging = event.is_pressed()
 
-	# Handle the camera movement itself
+	# handle the camera movement itself
 	if event is InputEventMouseMotion and is_dragging:
 		# 'event.relative' is the distance the mouse moved since the last frame
 		# move the camera in the opposite direction of the mouse drag
 		self.position -= event.relative
+		
+	# handle zooming
+	var zoom_factor = 1.1
+	if event is InputEventMouseButton:
+		# if mouse wheel up zoom in
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			zoom /= zoom_factor
+		# if mouse wheel down zoom out
+		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			zoom *= zoom_factor
