@@ -1,18 +1,35 @@
 extends Camera2D
 
-# declare variables
-var MAP_WIDTH
-var MAP_HEIGHT
-
 var is_dragging =false
 var drag_start_position = Vector2.ZERO
 
 func _ready():
-	# get parent node (should be world map node)
-	var world_map = get_parent()
-	# get values of map size
-	MAP_WIDTH = world_map.MAP_WIDTH
-	MAP_HEIGHT = world_map.MAP_HEIGHT
+	# get VisualMap node
+	var map = $"../VisualMap"
+	
+	# get viewport size
+	var viewport_rect = get_viewport_rect()
+	
+	# get original size of map
+	var map_texture = map.texture
+	
+	# calculate size of map at current scale
+	var map_size = map_texture.get_size() * map.scale
+	
+	# get global position of sprite
+	var map_global_position = map.global_position
+	
+	# calculate top-left corner
+	var map_top_left = map_global_position - map_size / 2.0
+	
+	# adjuct viewport for camera zoom level
+	var viewport_zoomed = viewport_rect.size / 2.0 / zoom
+	
+	# set limits
+	limit_left = map_top_left.x + viewport_zoomed.x
+	limit_top = map_top_left.y + viewport_zoomed.y
+	limit_right = map_top_left.x + map_size.x - viewport_zoomed.x
+	limit_bottom = map_top_left.y + map_size.y - viewport_zoomed.y
 
 func _unhandled_input(event):
 	# Start dragging when the left mouse button is pressed
@@ -26,13 +43,3 @@ func _unhandled_input(event):
 	# While dragging, move the camera
 	if event is InputEventMouseMotion and is_dragging:
 		self.position = get_global_mouse_position() - drag_start_position
-		
-		# define min and max camera positions
-		var min_x = MAP_WIDTH / 3.0
-		var max_x = MAP_WIDTH / 1.5
-		var min_y = MAP_HEIGHT / 3.0
-		var max_y = MAP_HEIGHT / 1.5
-		
-		# clamp camera to min and max positions
-		self.position.x = clamp(self.position.x, min_x, max_x)
-		self.position.y = clamp(self.position.y, min_y, max_y)
