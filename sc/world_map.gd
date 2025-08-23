@@ -8,11 +8,11 @@ const GEOJSON_PATH = "res://resources/maps/Sea of Aerthos and Outlining Regions 
 const MAP_WIDTH = 1920.0
 const MAP_HEIGHT = 957.0
 
-# dimensions of GeoJSON
-const MIN_LON = -81.7259
-const MAX_LON = 84.0824
-const MIN_LAT = -20.7944
-const MAX_LAT = 64.9737
+# initialise dimensions of GeoJSON
+var min_long = 999.0
+var max_long = -999.0
+var min_lat = 999.0
+var max_lat = -999.0
 
 # var to store province data
 var province_data = {}
@@ -123,10 +123,10 @@ func get_province_at_position(screen_position: Vector2) -> Polygon2D:
 # converts lat and long to pixel coordinates
 func chart_projection(long, lat):
 	# map longitude from its range to the pixel width range
-	var x = map_range(long, MIN_LON, MAX_LON, 0, MAP_WIDTH)
+	var x = map_range(long, min_long, max_long, 0, MAP_WIDTH)
 	
 	# 90 - lat to flip Y-axis, Y pixels increase downwards 
-	var y = map_range(lat, MIN_LAT, MAX_LAT, MAP_HEIGHT, 0)
+	var y = map_range(lat, min_lat, max_lat, MAP_HEIGHT, 0)
 	
 	return Vector2(x,y)
 
@@ -143,23 +143,12 @@ func find_map_bounds():
 
 	if not json_data or not json_data.has("features"): return
 		
-	var min_lon = 999.0
-	var max_lon = -999.0
-	var min_lat = 999.0
-	var max_lat = -999.0
 	
 	for feature in json_data.features:
 		for geo_point in feature.geometry.coordinates[0]:
-			var lon = geo_point[0]
+			var long = geo_point[0]
 			var lat = geo_point[1]
-			if lon < min_lon: min_lon = lon
-			if lon > max_lon: max_lon = lon
+			if long < min_long: min_long = long
+			if long > max_long: max_long = long
 			if lat < min_lat: min_lat = lat
 			if lat > max_lat: max_lat = lat
-			
-	print("--- MAP BOUNDS FOUND ---")
-	print("MIN Longitude: ", min_lon)
-	print("MAX Longitude: ", max_lon)
-	print("MIN Latitude:  ", min_lat)
-	print("MAX Latitude:  ", max_lat)
-	print("------------------------")
