@@ -38,12 +38,14 @@ func set_camera_limits():
 	# horizontal limits
 	# if wider then view, set limits
 	if map_size.x > viewport_zoomed.x:
+		print("Setting horizontal movement limits.")
 		var viewport_half_size_zoomed = viewport_rect.size / 2.0 / zoom
 		limit_left = map_top_left.x + viewport_half_size_zoomed.x
 		limit_right = map_top_left.x + map_size.x - viewport_half_size_zoomed.x
 	# if map is narrower, center the camera horizontally and lock it to center
 	else:
-		var map_center_x = map.top_left.x + map_size.x / 2.0
+		print("Map is smaller than screen, centering horizontally.")
+		var map_center_x = map_top_left.x + map_size.x / 2.0
 		limit_left = map_center_x
 		limit_right = map_center_x
 		self.position.x = map_center_x
@@ -51,11 +53,13 @@ func set_camera_limits():
 	# vertical Limits
 	# if map is taller than the view, set vertical limits
 	if map_size.y > viewport_zoomed.y:
+		print("Setting vertical movement limits.")
 		var viewport_half_size_zoomed = viewport_rect.size / 2.0 / zoom
 		limit_top = map_top_left.y + viewport_half_size_zoomed.y
 		limit_bottom = map_top_left.y + map_size.y - viewport_half_size_zoomed.y
 	# if map is shorter, center the camera vertically and lock it to center
 	else:
+		print("Map is smaller than screen, centering vertically.")
 		var map_center_y = map_top_left.y + map_size.y / 2.0
 		limit_top = map_center_y
 		limit_bottom = map_center_y
