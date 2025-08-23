@@ -1,7 +1,18 @@
 extends Camera2D
 
+# declare variables
+var MAP_WIDTH
+var MAP_HEIGHT
+
 var is_dragging =false
 var drag_start_position = Vector2.ZERO
+
+func _ready():
+	# get parent node (should be world map node)
+	var world_map = get_parent()
+	# get values of map size
+	MAP_WIDTH = world_map.MAP_WIDTH
+	MAP_HEIGHT = world_map.MAP_HEIGHT
 
 func _unhandled_input(event):
 	# Start dragging when the middle mouse button is pressed
