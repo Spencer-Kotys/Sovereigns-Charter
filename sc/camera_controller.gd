@@ -92,16 +92,14 @@ func set_camera_limits():
 		limit_bottom = map_center_y
 		self.position.y = map_center_y
 
-
-func _unhandled_input(event):
-	# Start dragging when the left mouse button is pressed
+func _input(event):
+	# Handle starting and stopping the drag
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.is_pressed():
-			is_dragging = true
-			drag_start_position = get_global_mouse_position() - self.position
-		else:
-			is_dragging = false
-			
-	# While dragging, move the camera
+		is_dragging = event.is_pressed()
+
+	# Handle the camera movement itself
 	if event is InputEventMouseMotion and is_dragging:
-		self.position = get_global_mouse_position() - drag_start_position
+		# 'event.relative' is the distance the mouse moved since the last frame.
+		# We move the camera in the opposite direction of the mouse drag.
+		# This feels natural, like dragging a piece of paper.
+		self.position -= event.relative
