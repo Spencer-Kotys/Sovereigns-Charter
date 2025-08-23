@@ -35,13 +35,30 @@ func set_camera_limits():
 	# adjuct viewport for camera zoom level
 	var viewport_zoomed = viewport_rect.size / zoom
 	
+		# --- FULL DEBUG OUTPUT ---
+	print("--- MAP & VIEWPORT VALUES ---")
+	print("Map Size (pixels): ", map_size)
+	print("Map Top Left Position: ", map_top_left)
+	print("Viewport Size (zoomed): ", viewport_zoomed)
+	print("-----------------------------")
+	
 	# horizontal limits
 	# if wider then view, set limits
 	if map_size.x > viewport_zoomed.x:
-		print("Setting horizontal movement limits.")
-		var viewport_half_size_zoomed = viewport_rect.size / 2.0 / zoom
-		limit_left = map_top_left.x + viewport_half_size_zoomed.x
-		limit_right = map_top_left.x + map_size.x - viewport_half_size_zoomed.x
+		print("--- HORIZONTAL CALCULATION ---")
+		var viewport_half_size_zoomed_x = viewport_rect.size.x / 2.0 / zoom
+		
+		var new_limit_left = map_top_left.x + viewport_half_size_zoomed_x
+		var new_limit_right = map_top_left.x + map_size.x - viewport_half_size_zoomed_x
+		
+		print("map_top_left.x: ", map_top_left.x)
+		print("map_size.x: ", map_size.x)
+		print("viewport_half_size_zoomed.x: ", viewport_half_size_zoomed_x)
+		print("FINAL limit_left: ", new_limit_left)
+		print("FINAL limit_right: ", new_limit_right)
+		
+		limit_left = new_limit_left
+		limit_right = new_limit_right
 	# if map is narrower, center the camera horizontally and lock it to center
 	else:
 		print("Map is smaller than screen, centering horizontally.")
@@ -53,10 +70,20 @@ func set_camera_limits():
 	# vertical Limits
 	# if map is taller than the view, set vertical limits
 	if map_size.y > viewport_zoomed.y:
-		print("Setting vertical movement limits.")
-		var viewport_half_size_zoomed = viewport_rect.size / 2.0 / zoom
-		limit_top = map_top_left.y + viewport_half_size_zoomed.y
-		limit_bottom = map_top_left.y + map_size.y - viewport_half_size_zoomed.y
+		print("--- VERTICAL CALCULATION ---")
+		var viewport_half_size_zoomed_y = viewport_rect.size.y / 2.0 / zoom
+
+		var new_limit_top = map_top_left.y + viewport_half_size_zoomed_y
+		var new_limit_bottom = map_top_left.y + map_size.y - viewport_half_size_zoomed_y
+
+		print("map_top_left.y: ", map_top_left.y)
+		print("map_size.y: ", map_size.y)
+		print("viewport_half_size_zoomed.y: ", viewport_half_size_zoomed_y)
+		print("FINAL limit_top: ", new_limit_top)
+		print("FINAL limit_bottom: ", new_limit_bottom)
+
+		limit_top = new_limit_top
+		limit_bottom = new_limit_bottom
 	# if map is shorter, center the camera vertically and lock it to center
 	else:
 		print("Map is smaller than screen, centering vertically.")
