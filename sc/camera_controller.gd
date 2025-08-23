@@ -30,10 +30,10 @@ func set_camera_limits():
 	var map_size = map_texture.get_size() * map.scale
 	
 	# calculate top-left corner
-	var map_top_left = map.global_position - map_size / 2.0
+	var map_top_left = map.global_position
 	
 	# adjuct viewport for camera zoom level
-	var viewport_zoomed = viewport_rect.size / 2.0 / zoom
+	var viewport_zoomed = viewport_rect.size / zoom
 	
 	# horizontal limits
 	# if wider then view, set limits
@@ -43,7 +43,7 @@ func set_camera_limits():
 		limit_right = map_top_left.x + map_size.x - viewport_half_size_zoomed.x
 	# if map is narrower, center the camera horizontally and lock it to center
 	else:
-		var map_center_x = map.global_position.x
+		var map_center_x = map.top_left.x + map_size.x / 2.0
 		limit_left = map_center_x
 		limit_right = map_center_x
 		self.position.x = map_center_x
@@ -56,7 +56,7 @@ func set_camera_limits():
 		limit_bottom = map_top_left.y + map_size.y - viewport_half_size_zoomed.y
 	# if map is shorter, center the camera vertically and lock it to center
 	else:
-		var map_center_y = map.global_position.y
+		var map_center_y = map_top_left.y + map_size.y / 2.0
 		limit_top = map_center_y
 		limit_bottom = map_center_y
 		self.position.y = map_center_y
