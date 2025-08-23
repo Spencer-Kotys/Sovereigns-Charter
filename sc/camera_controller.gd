@@ -46,7 +46,7 @@ func set_camera_limits():
 	# if wider then view, set limits
 	if map_size.x > viewport_zoomed.x:
 		print("--- HORIZONTAL CALCULATION ---")
-		var viewport_half_size_zoomed_x = viewport_rect.size.x / 2.0 / zoom
+		var viewport_half_size_zoomed_x = viewport_rect.size.x / 2.0 / zoom.x
 		
 		var new_limit_left = map_top_left.x + viewport_half_size_zoomed_x
 		var new_limit_right = map_top_left.x + map_size.x - viewport_half_size_zoomed_x
@@ -71,7 +71,7 @@ func set_camera_limits():
 	# if map is taller than the view, set vertical limits
 	if map_size.y > viewport_zoomed.y:
 		print("--- VERTICAL CALCULATION ---")
-		var viewport_half_size_zoomed_y = viewport_rect.size.y / 2.0 / zoom
+		var viewport_half_size_zoomed_y = viewport_rect.size.y / 2.0 / zoom.y
 
 		var new_limit_top = map_top_left.y + viewport_half_size_zoomed_y
 		var new_limit_bottom = map_top_left.y + map_size.y - viewport_half_size_zoomed_y
