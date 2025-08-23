@@ -4,9 +4,9 @@ extends Node2D
 @onready var provinces_container = $Provinces
 const GEOJSON_PATH = "res://resources/maps/Sea of Aerthos and Outlining Regions Cells 2025-08-21-19-15.geojson"
 
-# dimensions of map PNG
-const MAP_WIDTH = 1920.0
-const MAP_HEIGHT = 957.0
+# declare dimensions of PNG
+var map_width
+var map_height
 
 # initialise dimensions of GeoJSON
 var min_long = 999.0
@@ -25,7 +25,7 @@ func _ready():
 	
 	load_provinces()
 	draw_provinces()
-	
+
 func load_provinces():
 	# open file and save data
 	var file = FileAccess.open(GEOJSON_PATH, FileAccess.READ)
@@ -123,10 +123,10 @@ func get_province_at_position(screen_position: Vector2) -> Polygon2D:
 # converts lat and long to pixel coordinates
 func chart_projection(long, lat):
 	# map longitude from its range to the pixel width range
-	var x = map_range(long, min_long, max_long, 0, MAP_WIDTH)
+	var x = map_range(long, min_long, max_long, 0, map_width)
 	
 	# 90 - lat to flip Y-axis, Y pixels increase downwards 
-	var y = map_range(lat, min_lat, max_lat, MAP_HEIGHT, 0)
+	var y = map_range(lat, min_lat, max_lat, map_height, 0)
 	
 	return Vector2(x,y)
 
@@ -135,6 +135,12 @@ func map_range(value, in_min, in_max, out_min, out_max):
 	return (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
 func find_map_bounds():
+	# get size of map image
+	var map_size = $VisualMap.texture.get_size()
+	map_width = map_size.x
+	map_height = map_size.y
+	
+	# get max lat and long
 	var file = FileAccess.open(GEOJSON_PATH, FileAccess.READ)
 	if not file: return
 	
