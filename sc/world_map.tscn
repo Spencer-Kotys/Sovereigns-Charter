@@ -8,6 +8,7 @@
 script = ExtResource("1_r63r8")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(1000, 500)
 script = ExtResource("2_4ojr4")
 
 [node name="VisualMap" type="Sprite2D" parent="."]

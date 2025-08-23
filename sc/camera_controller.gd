@@ -26,9 +26,13 @@ func _unhandled_input(event):
 	# While dragging, move the camera
 	if event is InputEventMouseMotion and is_dragging:
 		self.position = get_global_mouse_position() - drag_start_position
-		var min_x = MAP_WIDTH / 2.0
-		var max_x = MAP_WIDTH
-		var min_y = MAP_HEIGHT / 2.0
-		var max_y = MAP_HEIGHT
+		
+		# define min and max camera positions
+		var min_x = MAP_WIDTH / 3.0
+		var max_x = MAP_WIDTH / 1.5
+		var min_y = MAP_HEIGHT / 3.0
+		var max_y = MAP_HEIGHT / 1.5
+		
+		# clamp camera to min and max positions
 		self.position.x = clamp(self.position.x, min_x, max_x)
 		self.position.y = clamp(self.position.y, min_y, max_y)
